@@ -46,7 +46,6 @@ main {
   border: 1px solid #fff;
   border-radius: 8px;
   box-sizing: border-box;
-  background-color: #030;
   overflow: hidden;
 }
 
@@ -89,27 +88,13 @@ input {
     pointer-events: none;
   }
 }
-
-/* When the game starts, make the .lava active */
-input:checked ~ .lava {
-  background-color: #600;
-
-  &:hover {
-    z-index:1;
-
-    * {
-      opacity: 1;
-      pointer-events: all;
-    }
-  }
-}
-
 /* Place a round Start button in the center with an
  * invisible inactive .blocker in front of it.
  */
 .blocker,
 .start {
   position: absolute;
+  z-index: 1;
   top: 35px;
   left: 110px;
   width: 60px;
@@ -147,7 +132,44 @@ input:checked ~ .start::after {
   content: "Panic!";
 }
 
-/* Prevent the .start button from toggling the input */
-label:has(input:checked) ~ .blocker {
-  pointer-events: all;
+
+/* When the game starts, make the .lava active */
+label:has(input:checked) {
+  & ~ .lava {
+    background-color: #600;
+
+    &:hover {
+      z-index:2;
+
+      * {
+        opacity: 1;
+        pointer-events: all;
+      }
+    }
+  }
+
+  /* Prevent .start button from toggling the input */
+  & ~ .blocker {
+    pointer-events: all;
+  }
+}
+
+/* Show the GitHub logo */
+a.github {
+  width: 0;
+  height: 0;
+
+  img {
+    position: absolute;
+    right: 3px;
+    bottom: 3px;
+    width: 32px;
+    height: 32px;
+    filter: grayscale(1);
+    opacity: 0.25;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
 }
