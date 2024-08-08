@@ -1,0 +1,153 @@
+:root {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+
+  --gap: 10px;
+  --bg: #060;
+  --border: #393;
+  --active: #030;
+
+  color: #ddd;
+  background-color: #222;
+}
+
+/* Place main in the center */
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Style both the Start and Play Again buttons */
+.button {
+  border: 1px outset var(--border);
+  border-radius: var(--gap);
+  padding: var(--gap);
+  cursor: pointer;
+  background-color: var(--bg);
+}
+
+.button:hover {
+  color: #fff;
+}
+
+.button:hover:active {
+  border-style: inset;
+  background-color: var(--active);
+}
+
+/* Make main the default size for an iframe */
+main {
+  position: relative;
+  width: 300px;
+  height: 150px;
+  border: 1px solid #fff;
+  border-radius: 8px;
+  box-sizing: border-box;
+  background-color: #030;
+  overflow: hidden;
+}
+
+/* The link is to look like a button */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Take the checkbox out of the flow of the page
+ * and show it in front of the .lava younger sibling
+ * so that it will be a safe place for the mouse.
+ */
+input {
+  position: absolute;
+  z-index: 2;
+}
+
+/* Fill the main element with .lava */
+.lava {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #030; /* <<< No eruption yet */
+
+  /* Style the "You Lost" span and the link... */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+  span {
+    font-size: 40px;
+    color: #f33;
+  }
+
+  /* ... but hide them and make them inactive */
+  * {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+/* When the game starts, make the .lava active */
+input:checked ~ .lava {
+  background-color: #600;
+
+  &:hover {
+    z-index:1;
+
+    * {
+      opacity: 1;
+      pointer-events: all;
+    }
+  }
+}
+
+/* Place a round Start button in the center with an
+ * invisible inactive .blocker in front of it.
+ */
+.blocker,
+.start {
+  position: absolute;
+  top: 35px;
+  left: 110px;
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  border-radius: 60px;
+  text-align: center;
+}
+.start::after {
+  content: "Start";
+}
+/* Make the .blocker invisible and inactive */
+.blocker {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* When the game starts, shrink both the .start button
+ * and the .blocker, and move them together towards 
+ * the input element in the top left corner.
+ */
+label:has(input:checked) ~ .blocker,
+input:checked ~ .start {
+  top: 4px;
+  left: 4px;
+  width: 10px;
+  height: 10px;
+  padding: 0px;
+  font-size: 0px;
+  line-height: 10px;
+  transition: all 10s;
+}
+
+input:checked ~ .start::after {
+  content: "Panic!";
+}
+
+/* Prevent the .start button from toggling the input */
+label:has(input:checked) ~ .blocker {
+  pointer-events: all;
+}
