@@ -1,13 +1,27 @@
 :root {
   font-family: Avenir, Helvetica, Arial, sans-serif;
 
-  --gap: 10px;
-  --bg: #060;
-  --border: #393;
-  --active: #030;
+  --form:  300px;
+  --half:  150px;
+  --size:   60px;
+  --pad:     8px;
+  --top:   calc((var(--half) - var(--size)) / 2 - var(--pad));
+  --left:  calc((var(--form) - var(--size)) / 2 - var(--pad));
+  --end:    10px;
+  --gap:     4px;
+  --line:    1px;
 
-  color: #ddd;
-  background-color: #222;
+  --white: #fff;
+  --light: #ddd;
+  --dark:  #222;
+  --btn:   #060;
+  --bg:    #030;
+  --red:   #f33;
+  --lava:  #600;
+  --deep:  #300;
+  --brdr:  #fff6; /* button-color-agnostic border color */
+
+  --time:   10s;
 }
 
 /* Place main in the center */
@@ -18,41 +32,46 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: var(--light);
+  background-color: var(--dark);
 }
 
 /* Style both the Start and Play Again buttons */
+button,
 .button {
-  border: 1px outset var(--border);
-  border-radius: var(--gap);
-  padding: var(--gap);
+  border: var(--line) outset var(--brdr);
+  border-radius: var(--pad);
+  padding: var(--pad);
   cursor: pointer;
+  background-color: var(--btn);
+}
+
+button {
+  --bg: var(--deep);
+  background-color: transparent;
+  color: inherit;
+}
+
+button:hover,
+.button:hover {
+  color: var(--white);
+}
+
+button:hover:active,
+.button:hover:active {
+  border-style: inset;
   background-color: var(--bg);
 }
 
-.button:hover {
-  color: #fff;
-}
-
-.button:hover:active {
-  border-style: inset;
-  background-color: var(--active);
-}
-
-/* Make main the default size for an iframe */
-main {
+/* Make form the default size for an iframe */
+form {
   position: relative;
-  width: 300px;
-  height: 150px;
-  border: 1px solid #fff;
-  border-radius: 8px;
+  width: var(--form);
+  height: var(--half);
+  border: var(--line) solid var(--white);
+  border-radius: var(--pad);
   box-sizing: border-box;
   overflow: hidden;
-}
-
-/* The link is to look like a button */
-a {
-  color: inherit;
-  text-decoration: none;
 }
 
 /* Take the checkbox out of the flow of the page
@@ -64,12 +83,12 @@ input {
   z-index: 2;
 }
 
-/* Fill the main element with .lava */
+/* Fill the form element with .lava */
 .lava {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: #030; /* <<< No eruption yet */
+  background: var(--bg); /* <<< No eruption yet */
 
   /* Style the "You Lost" span and the link... */
   display: flex;
@@ -78,9 +97,9 @@ input {
   align-items: center;
   
   p {
-    font-size: 40px;
+    font-size: var(--size);
     margin: 0;
-    color: #f33;
+    color: var(--red);
   }
 
   /* ... but hide them and make them inactive */
@@ -89,25 +108,26 @@ input {
     pointer-events: none;
   }
 }
-/* Place a round Start button in the center with an
- * invisible inactive .blocker in front of it.
+
+/* Place a round Start button in the center with an invisible
+ * .blocker in front of it. Move them both in front of the lava.
  */
 .blocker,
 .start {
   position: absolute;
   z-index: 1;
-  top: 35px;
-  left: 110px;
-  width: 60px;
-  height: 60px;
-  line-height: 60px;
-  border-radius: 60px;
+  top: var(--top);
+  left: var(--left);
+  width: var(--size);
+  height: var(--size);
+  line-height: var(--size);
+  border-radius: var(--size);
   text-align: center;
 }
 .start::after {
   content: "Start";
 }
-/* Make the .blocker invisible and inactive */
+/* Make the .blocker invisible and inactive at the start */
 .blocker {
   opacity: 0;
   pointer-events: none;
@@ -117,16 +137,18 @@ input {
  * and the .blocker, and move them together towards 
  * the input element in the top left corner.
  */
-label:has(input:checked) ~ .blocker,
-input:checked ~ .start {
-  top: 4px;
-  left: 4px;
-  width: 10px;
-  height: 10px;
-  padding: 0px;
-  font-size: 0px;
-  line-height: 10px;
-  transition: all 10s;
+ label:has(:checked) {
+  .start,
+  & ~ .blocker {
+    top: var(--gap);
+    left: var(--gap);
+    width: var(--end);
+    height: var(--end);
+    padding: 0px;
+    font-size: 0px;
+    line-height: var(--end);
+    transition: all var(--time);
+  }
 }
 
 input:checked ~ .start::after {
@@ -137,7 +159,7 @@ input:checked ~ .start::after {
 /* When the game starts, make the .lava active */
 label:has(input:checked) {
   & ~ .lava {
-    background-color: #600;
+    background-color: var(--lava);
 
     &:hover {
       z-index:2;
