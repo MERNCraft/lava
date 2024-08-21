@@ -186,6 +186,7 @@ a.github {
     position: absolute;
     right: 3px;
     bottom: 3px;
+    z-index: 3;
     width: 32px;
     height: 32px;
     filter: grayscale(1);
